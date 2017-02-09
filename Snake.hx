@@ -3,53 +3,66 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 
-class Snake  extends Sprite {
+class Snake extends Sprite {
 
   private var isInitialized = false;
+  private var theApple: Sprite;
 
-  private function keyUp (event:KeyboardEvent) {
-    
-  }
-
-  function resize(e) 
-  {
-    if (!isInitialized) init();
-    // else handle a resize
+  private function keyUp (event:KeyboardEvent){
+    switch( event.keyCode ) {
+    case 38: // KEY_UP
+      trace('up');
+    case 40: // KEY_DOWN
+      trace('down');
+    case 39: // KEY_RIGHT
+      trace('right');
+    case 37: // KEY_LEFT
+      trace('left');
+    }
   }
 
   function init() {
     if (isInitialized) return;
     isInitialized = true;
-    var stage = Lib.current.stage;
 
-    // create the apple
-    var the_apple = new Sprite();
-    the_apple.graphics.beginFill(0xCC0000);
+    theApple = new Sprite();
 
-    the_apple.graphics.drawCircle(0, 0, 5);
-    the_apple.x = (stage.stageWidth - 10) / 2;
-    the_apple.y = (stage.stageHeight - 10) / 2;
+    theApple.graphics.beginFill(0xCC0000);
+    theApple.graphics.drawCircle(0, 0, 5);
+    theApple.x = (stage.stageWidth - 10) / 2;
+    theApple.y = (stage.stageHeight - 10) / 2;
 
-    stage.addChild(the_apple);
-    
+    Lib.current.stage.addChild(theApple);
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
-  }
+  };
+
+  function resize(e) 
+  {
+    if (!isInitialized) init();
+    // else handle a resize
+  };
 
   public function new() 
   {
     super();	
     addEventListener(Event.ADDED_TO_STAGE, added);
-  }
+  };
 
   function added(e) 
   {
     removeEventListener(Event.ADDED_TO_STAGE, added);
     stage.addEventListener(Event.RESIZE, resize);
     init();
-  }
+  };
 
   // main entry point
-  public static function main() {
+  public static function main() 
+  {
+    // static entry point
+    Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
+    Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
     Lib.current.addChild(new Snake());
-  }
+    //
+  };
+
 }
