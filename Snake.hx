@@ -4,35 +4,54 @@ import flash.events.Event;
 import flash.events.KeyboardEvent;
 
 class Snake extends Sprite {
+  public static var RED = 0xCC0000;
+  public static var ORANGE = 0xCC6600;
+  public static var YELLOW = 0xCCCC00;
+  public static var GREEN = 0x00CC00;
+  public static var BLUE = 0x0000CC;
+  public static var PURPLE = 0xCC00CC;
+  // size of the game board's implicit grid
+  public static var scale = 16;
 
-  private var isInitialized = false;
   private var theApple: Sprite;
+  private var theSnake: Sprite;
+  private var isInitialized = false;
+  // the unique apple
 
   private function keyUp (event:KeyboardEvent){
     switch( event.keyCode ) {
     case 38: // KEY_UP
-      trace('up');
+      theSnake.y -= scale;
     case 40: // KEY_DOWN
-      trace('down');
+      theSnake.y += scale;
     case 39: // KEY_RIGHT
-      trace('right');
+      theSnake.x += scale;
     case 37: // KEY_LEFT
-      trace('left');
+      theSnake.x -= scale;
     }
-  }
+  };
 
   function init() {
     if (isInitialized) return;
     isInitialized = true;
 
     theApple = new Sprite();
-
-    theApple.graphics.beginFill(0xCC0000);
-    theApple.graphics.drawCircle(0, 0, 5);
-    theApple.x = (stage.stageWidth - 10) / 2;
-    theApple.y = (stage.stageHeight - 10) / 2;
+    theApple.graphics.beginFill(RED);
+    theApple.graphics.drawCircle(0, 0, scale/2);
+    theApple.x = (stage.stageWidth - scale) / 2;
+    theApple.y = (stage.stageHeight - scale) / 2;
 
     Lib.current.stage.addChild(theApple);
+
+    theSnake = new Sprite();
+    theSnake.graphics.beginFill(GREEN);
+    theSnake.graphics.drawCircle(0, 0, scale/2);
+    theSnake.x = (stage.stageWidth - scale) / 2;
+    theSnake.y = (stage.stageHeight - scale) / 2;
+
+    Lib.current.stage.addChild(theSnake);
+    
+
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
   };
 
