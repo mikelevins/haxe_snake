@@ -3,6 +3,34 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 
+class AppleActor {
+  private var sprite:Sprite;
+
+  public function new() 
+  {
+    sprite = new Sprite();
+    Lib.current.stage.addChild(sprite);
+    sprite.graphics.beginFill(Snake.RED);
+    sprite.graphics.drawCircle(0, 0, Snake.scale/2);
+    sprite.x = (Lib.current.stage.stageWidth - Snake.scale) / 2;
+    sprite.y = (Lib.current.stage.stageHeight - Snake.scale) / 2;
+  };
+}
+
+class SnakeActor {
+  public var head:Sprite;
+  public function new() 
+  {
+    head = new Sprite();
+    Lib.current.stage.addChild(head);
+    head.graphics.beginFill(Snake.GREEN);
+    head.graphics.drawCircle(0, 0, Snake.scale/2);
+    head.x = (Lib.current.stage.stageWidth - Snake.scale) / 2;
+    head.y = (Lib.current.stage.stageHeight - Snake.scale) / 2;
+  };
+  
+}
+
 class Snake extends Sprite {
   public static var RED = 0xCC0000;
   public static var ORANGE = 0xCC6600;
@@ -14,9 +42,9 @@ class Snake extends Sprite {
   // size of the game board's implicit grid
   public static var scale = 16;
 
-  private var theApple: Sprite;
-  private var greenSnake: Sprite;
-  private var cyanSnake: Sprite;
+  private var theApple: AppleActor;
+  private var greenSnake: SnakeActor;
+  private var cyanSnake: SnakeActor;
 
   private var isInitialized = false;
   // the unique apple
@@ -25,23 +53,23 @@ class Snake extends Sprite {
     switch( event.keyCode ) {
       // greenSnake
     case 38: // KEY_UP
-      greenSnake.y -= scale;
+      greenSnake.head.y -= scale;
     case 40: // KEY_DOWN
-      greenSnake.y += scale;
+      greenSnake.head.y += scale;
     case 39: // KEY_RIGHT
-      greenSnake.x += scale;
+      greenSnake.head.x += scale;
     case 37: // KEY_LEFT
-      greenSnake.x -= scale;
+      greenSnake.head.x -= scale;
 
       // cyanSnake
     case 87: // w
-      cyanSnake.y -= scale;
+      cyanSnake.head.y -= scale;
     case 83: // s
-      cyanSnake.y += scale;
+      cyanSnake.head.y += scale;
     case 68: // d
-      cyanSnake.x += scale;
+      cyanSnake.head.x += scale;
     case 65: // s
-      cyanSnake.x -= scale;
+      cyanSnake.head.x -= scale;
 
     default:
       trace(event.keyCode);
@@ -52,26 +80,9 @@ class Snake extends Sprite {
     if (isInitialized) return;
     isInitialized = true;
 
-    theApple = new Sprite();
-    theApple.graphics.beginFill(RED);
-    theApple.graphics.drawCircle(0, 0, scale/2);
-    theApple.x = (stage.stageWidth - scale) / 2;
-    theApple.y = (stage.stageHeight - scale) / 2;
-    Lib.current.stage.addChild(theApple);
-
-    greenSnake = new Sprite();
-    greenSnake.graphics.beginFill(GREEN);
-    greenSnake.graphics.drawCircle(0, 0, scale/2);
-    greenSnake.x = (stage.stageWidth - scale) / 2;
-    greenSnake.y = (stage.stageHeight - scale) / 2;    
-    Lib.current.stage.addChild(greenSnake);
-
-    cyanSnake = new Sprite();
-    cyanSnake.graphics.beginFill(CYAN);
-    cyanSnake.graphics.drawCircle(0, 0, scale/2);
-    cyanSnake.x = (stage.stageWidth - scale) / 2;
-    cyanSnake.y = (stage.stageHeight - scale) / 2;    
-    Lib.current.stage.addChild(cyanSnake);    
+    theApple = new AppleActor();
+    greenSnake = new SnakeActor();
+    cyanSnake = new SnakeActor();
 
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
   };
