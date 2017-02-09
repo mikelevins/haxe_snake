@@ -47,6 +47,7 @@ class Snake extends Sprite {
   private var theApple: AppleActor;
   private var greenSnake: SnakeActor;
   private var cyanSnake: SnakeActor;
+  private var blueSnake: SnakeActor;
 
   private var isInitialized = false;
   // the unique apple
@@ -73,6 +74,17 @@ class Snake extends Sprite {
     case 65: // s
       cyanSnake.head.x -= scale;
 
+      // blueSnake
+    case 73: // i
+      blueSnake.head.y -= scale;
+    case 75: // k
+      blueSnake.head.y += scale;
+    case 74: // j
+      blueSnake.head.x += scale;
+    case 76: // l
+      blueSnake.head.x -= scale;
+
+
     default:
       trace(event.keyCode);
     }
@@ -85,6 +97,7 @@ class Snake extends Sprite {
     theApple = new AppleActor();
     greenSnake = new SnakeActor(GREEN);
     cyanSnake = new SnakeActor(CYAN);
+    blueSnake = new SnakeActor(BLUE);
 
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
   };
