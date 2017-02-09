@@ -19,11 +19,13 @@ class AppleActor {
 
 class SnakeActor {
   public var head:Sprite;
-  public function new() 
+  public var color: Int;
+  public function new( aColor: Int ) 
   {
+    this.color = aColor;
     head = new Sprite();
     Lib.current.stage.addChild(head);
-    head.graphics.beginFill(Snake.GREEN);
+    head.graphics.beginFill(this.color);
     head.graphics.drawCircle(0, 0, Snake.scale/2);
     head.x = (Lib.current.stage.stageWidth - Snake.scale) / 2;
     head.y = (Lib.current.stage.stageHeight - Snake.scale) / 2;
@@ -81,8 +83,8 @@ class Snake extends Sprite {
     isInitialized = true;
 
     theApple = new AppleActor();
-    greenSnake = new SnakeActor();
-    cyanSnake = new SnakeActor();
+    greenSnake = new SnakeActor(GREEN);
+    cyanSnake = new SnakeActor(CYAN);
 
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
   };
