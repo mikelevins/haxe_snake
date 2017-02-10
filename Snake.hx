@@ -18,10 +18,16 @@ class AppleActor {
 }
 
 class SnakeActor {
+  public static var NORTH = [0,-1];
+  public static var EAST = [1,0];
+  public static var SOUTH = [0,1];
+  public static var WEST = [-1,0];
+
   public var head:Sprite;
+  public var orientation = NORTH;
   public var color: Int;
-  public function new( aColor: Int ) 
-  {
+
+  public function new( aColor: Int ) {
     this.color = aColor;
     head = new Sprite();
     Lib.current.stage.addChild(head);
@@ -30,6 +36,14 @@ class SnakeActor {
     head.x = (Lib.current.stage.stageWidth - Snake.scale) / 2;
     head.y = (Lib.current.stage.stageHeight - Snake.scale) / 2;
   };
+
+  private function orientationX (){return orientation[0];}
+  private function orientationY (){return orientation[1];}
+
+  public function advance(){
+    head.x += Snake.scale*orientationX();
+    head.y += Snake.scale*orientationY();
+  }
   
 }
 
@@ -56,35 +70,40 @@ class Snake extends Sprite {
     switch( event.keyCode ) {
       // greenSnake
     case 38: // KEY_UP
-      greenSnake.head.y -= scale;
+      greenSnake.orientation=SnakeActor.NORTH;
     case 40: // KEY_DOWN
-      greenSnake.head.y += scale;
+      greenSnake.orientation=SnakeActor.SOUTH;
     case 39: // KEY_RIGHT
-      greenSnake.head.x += scale;
+      greenSnake.orientation=SnakeActor.EAST;
     case 37: // KEY_LEFT
-      greenSnake.head.x -= scale;
+      greenSnake.orientation=SnakeActor.WEST;
 
       // cyanSnake
     case 87: // w
-      cyanSnake.head.y -= scale;
+      cyanSnake.orientation=SnakeActor.NORTH;
     case 83: // s
-      cyanSnake.head.y += scale;
+      cyanSnake.orientation=SnakeActor.SOUTH;
     case 68: // d
-      cyanSnake.head.x += scale;
-    case 65: // s
-      cyanSnake.head.x -= scale;
+      cyanSnake.orientation=SnakeActor.EAST;
+    case 65: // a
+      cyanSnake.orientation=SnakeActor.WEST;
 
       // blueSnake
     case 73: // i
-      blueSnake.head.y -= scale;
+      blueSnake.orientation=SnakeActor.NORTH;
     case 75: // k
-      blueSnake.head.y += scale;
+      blueSnake.orientation=SnakeActor.SOUTH;
     case 74: // j
-      blueSnake.head.x += scale;
+      blueSnake.orientation=SnakeActor.WEST;
     case 76: // l
-      blueSnake.head.x -= scale;
+      blueSnake.orientation=SnakeActor.EAST;
 
-
+      // advance snakes
+    case 32: // space
+      greenSnake.advance();
+      cyanSnake.advance();
+      blueSnake.advance();
+      
     default:
       trace(event.keyCode);
     }
