@@ -11,7 +11,8 @@ A simple Snake game in Haxe
 3:30PM - add more snakes; refactor apple and snakes into simple classes
 4:30PM - take the poodle to the park
 9:00PM - add tails to the snakes
-
+9:20PM - other business
+9:40PM - add tails to snakes
 
 
 

@@ -24,13 +24,17 @@ class SnakeActor {
   public static var WEST = [-1,0];
 
   public var head:Sprite;
+  public var tail:Array<Sprite>;
   public var orientation = NORTH;
   public var color: Int;
 
   public function new( aColor: Int ) {
     this.color = aColor;
     head = new Sprite();
+    tail = [new Sprite()];
+    
     Lib.current.stage.addChild(head);
+    
     head.graphics.beginFill(this.color);
     head.graphics.drawCircle(0, 0, Snake.scale/2);
     head.x = (Lib.current.stage.stageWidth - Snake.scale) / 2;
@@ -40,9 +44,19 @@ class SnakeActor {
   private function orientationX (){return orientation[0];}
   private function orientationY (){return orientation[1];}
 
+  function borderCrossing(x:Float,y:Float):Bool {return false;};
+  function alreadySnakeActor(x:Float,y:Float):Bool{return false;};
+  function killSnakeActor(){return;};
+  function maybeAddCell(x:Float,y:Float,oldX:Float,oldY:Float){return;};
+  
   public function advance(){
+    var previousX = head.x;
+    var previousY = head.y;
     head.x += Snake.scale*orientationX();
     head.y += Snake.scale*orientationY();
+    if (borderCrossing(head.x,head.y)) killSnakeActor();
+    if (alreadySnakeActor(head.x,head.y)) killSnakeActor();
+    maybeAddCell(head.x,head.y,previousX,previousY);
   }
   
 }
