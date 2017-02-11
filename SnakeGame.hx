@@ -8,12 +8,15 @@ import flash.events.KeyboardEvent;
 // ---------------------------------
 
 class Apple extends Sprite {
-  public var color: Int;
-  private var isInitialized = false;
+  
+  private var color: Int;
+  private var initialized = false;
 
+  public function getColor () { return this.color; }
+  
   function init() {
-    if (!isInitialized) {
-      isInitialized = true;
+    if (!initialized) {
+      initialized = true;
       this.graphics.beginFill(SnakeGame.RED);
       this.graphics.drawCircle(0, 0, SnakeGame.scale/2);
       this.x = (Lib.current.stage.stageWidth - SnakeGame.scale) / 2;
@@ -39,6 +42,8 @@ class Apple extends Sprite {
 // ---------------------------------
 
 class Snake {
+  private var head:Sprite;
+  private var tail:Array<Sprite>;
 }
 
 // ---------------------------------
@@ -46,9 +51,11 @@ class Snake {
 // ---------------------------------
 
 class SnakeGame {
+
   // public 
   // ----------------
   // colors
+
   public static var RED = 0xCC0000;
   public static var GREEN = 0x00CC00;
   public static var CYAN = 0x00CCCC;
@@ -60,12 +67,12 @@ class SnakeGame {
   public static var EAST = [1,0];
   public static var WEST = [-1,0];
 
-  public static function orientationX(orient:Array<Int>) {return orient[0];}
-  public static function orientationY(orient:Array<Int>) {return orient[1];}
+  public static function orientationX(orient:Array<Int>) { return orient[0]; }
+  public static function orientationY(orient:Array<Int>) { return orient[1]; }
 
   // size of the game board's implicit grid
   public static var scale = 16;
-
+  
   // private 
   // ----------------
 
@@ -75,7 +82,7 @@ class SnakeGame {
 
   // the apple
   private static var snakes:Array<Snake>;
-  public static function theSnakes():Array<Snake> {return snakes;};
+  public static function theSnakes():Array<Snake> { return snakes; };
 
   // main entry point
   // ----------------
