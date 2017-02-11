@@ -14,7 +14,7 @@ class Apple extends Sprite {
 
   public function getColor () { return this.color; }
   
-  function init() {
+  private function init() {
     if (!initialized) {
       initialized = true;
       this.graphics.beginFill(SnakeGame.RED);
@@ -24,7 +24,7 @@ class Apple extends Sprite {
     };
   }
   
-  function added(e) 
+  private function added(e) 
   {
     removeEventListener(Event.ADDED_TO_STAGE, added);
     init();
@@ -42,8 +42,26 @@ class Apple extends Sprite {
 // ---------------------------------
 
 class Snake {
+  private var color: Int;
+  private var initialized = false;
   private var head:Sprite;
   private var tail:Array<Sprite>;
+
+  public function getColor () { return this.color; }
+
+  public function addToStage(x:Float, y:Float) {
+    this.head.x = x;
+    this.head.y = y;
+    Lib.current.addChild(head);    
+  }
+  
+  public function new(aColor:Int){
+    this.color = aColor;
+    this.head = new Sprite();
+    this.tail = [];
+    this.head.graphics.beginFill(aColor);
+    this.head.graphics.drawCircle(0, 0, SnakeGame.scale/2);
+  }
 }
 
 // ---------------------------------
@@ -88,11 +106,29 @@ class SnakeGame {
   // ----------------
   public static function main() 
   {
+    var startX = (Lib.current.stage.stageWidth - scale) / 2;
+    var startY = (Lib.current.stage.stageHeight - scale) / 2;
+    
     apple = new Apple(RED);
+    snakes = [(new Snake(GREEN)),
+              (new Snake(CYAN)),
+              (new Snake(BLUE))];
+
+    var locations = [[startX-2*scale, startY+2*scale],
+                     [startX, startY+2*scale],
+                     [startX+2*scale, startY+2*scale]];
+
+    for (i in 0...3) {
+      var snake = snakes[i];
+      var loc = locations[i];
+      snake.addToStage(loc[0],loc[1]);
+    }
     
     Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
     Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
     Lib.current.addChild(apple);
+
+    
   };
 
 }
