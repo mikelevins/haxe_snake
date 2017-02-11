@@ -3,6 +3,13 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 
+enum Orientation {
+  North;
+  East;
+  South;
+  West;
+}
+
 class AppleActor {
   private var sprite:Sprite;
 
@@ -18,14 +25,10 @@ class AppleActor {
 }
 
 class SnakeActor {
-  public static var NORTH = [0,-1];
-  public static var EAST = [1,0];
-  public static var SOUTH = [0,1];
-  public static var WEST = [-1,0];
 
   public var head:Sprite;
   public var tail:Array<Sprite>;
-  public var orientation = NORTH;
+  public var orientation = Orientation.North;
   public var color: Int;
 
   public function new( aColor: Int ) {
@@ -41,9 +44,6 @@ class SnakeActor {
     head.y = (Lib.current.stage.stageHeight - Snake.scale) / 2;
   };
 
-  private function orientationX (){return orientation[0];}
-  private function orientationY (){return orientation[1];}
-
   function borderCrossing(x:Float,y:Float):Bool {return false;};
   function alreadySnakeActor(x:Float,y:Float):Bool{return false;};
   function killSnakeActor(){return;};
@@ -52,8 +52,8 @@ class SnakeActor {
   public function advance(){
     var previousX = head.x;
     var previousY = head.y;
-    head.x += Snake.scale*orientationX();
-    head.y += Snake.scale*orientationY();
+    head.x += Snake.scale*Snake.orientationX(orientation);
+    head.y += Snake.scale*Snake.orientationY(orientation);
     if (borderCrossing(head.x,head.y)) killSnakeActor();
     if (alreadySnakeActor(head.x,head.y)) killSnakeActor();
     maybeAddCell(head.x,head.y,previousX,previousY);
@@ -78,39 +78,56 @@ class Snake extends Sprite {
   private var blueSnake: SnakeActor;
 
   private var isInitialized = false;
-  // the unique apple
 
+  public static function orientationX(orient:Orientation){
+    switch ( orient ) {
+    case Orientation.North: return 0;
+    case Orientation.East: return 1;
+    case Orientation.South: return 0;
+    case Orientation.West: return -1;
+    }
+  }
+
+  public static function orientationY(orient:Orientation){
+    switch ( orient ) {
+    case Orientation.North: return -1;
+    case Orientation.East: return 0;
+    case Orientation.South: return 1;
+    case Orientation.West: return 0;
+    }
+  }
+  
   private function keyUp (event:KeyboardEvent){
     switch( event.keyCode ) {
       // greenSnake
     case 38: // KEY_UP
-      greenSnake.orientation=SnakeActor.NORTH;
+      greenSnake.orientation=Orientation.North;
     case 40: // KEY_DOWN
-      greenSnake.orientation=SnakeActor.SOUTH;
+      greenSnake.orientation=Orientation.South;
     case 39: // KEY_RIGHT
-      greenSnake.orientation=SnakeActor.EAST;
+      greenSnake.orientation=Orientation.East;
     case 37: // KEY_LEFT
-      greenSnake.orientation=SnakeActor.WEST;
+      greenSnake.orientation=Orientation.West;
 
       // cyanSnake
     case 87: // w
-      cyanSnake.orientation=SnakeActor.NORTH;
+      cyanSnake.orientation=Orientation.North;
     case 83: // s
-      cyanSnake.orientation=SnakeActor.SOUTH;
+      cyanSnake.orientation=Orientation.South;
     case 68: // d
-      cyanSnake.orientation=SnakeActor.EAST;
+      cyanSnake.orientation=Orientation.East;
     case 65: // a
-      cyanSnake.orientation=SnakeActor.WEST;
+      cyanSnake.orientation=Orientation.West;
 
       // blueSnake
     case 73: // i
-      blueSnake.orientation=SnakeActor.NORTH;
+      blueSnake.orientation=Orientation.North;
     case 75: // k
-      blueSnake.orientation=SnakeActor.SOUTH;
+      blueSnake.orientation=Orientation.South;
     case 74: // j
-      blueSnake.orientation=SnakeActor.WEST;
+      blueSnake.orientation=Orientation.West;
     case 76: // l
-      blueSnake.orientation=SnakeActor.EAST;
+      blueSnake.orientation=Orientation.East;
 
       // advance snakes
     case 32: // space
