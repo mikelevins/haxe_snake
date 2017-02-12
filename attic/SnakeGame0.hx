@@ -43,6 +43,7 @@ class Apple extends Sprite {
 
 class Snake {
   private var color: Int;
+  private var orientation: Array<Int>;
   private var initialized = false;
   private var head:Sprite;
   private var tail:Array<Sprite>;
@@ -54,9 +55,28 @@ class Snake {
     this.head.y = y;
     Lib.current.addChild(head);    
   }
+
+  private function addSegment(x:Float,y:Float) {
+    var sprite = new Sprite();
+    sprite.graphics.beginFill(color);
+    sprite.graphics.drawCircle(0, 0, SnakeGame.scale/2);
+    sprite.x = x;
+    sprite.y = y;
+    this.tail.insert(0,sprite);
+    Lib.current.addChild(sprite);        
+  }
   
-  public function new(aColor:Int){
+  public function advance () {
+    var lastX = this.head.x;
+    var lastY = this.head.y;
+    this.head.x += SnakeGame.scale*SnakeGame.orientationX(this.orientation);
+    this.head.y += SnakeGame.scale*SnakeGame.orientationY(this.orientation);
+    addSegment(lastX,lastY);
+  }
+  
+  public function new(aColor:Int, anOrientation:Array<Int>){
     this.color = aColor;
+    this.orientation = anOrientation;
     this.head = new Sprite();
     this.tail = [];
     this.head.graphics.beginFill(aColor);
@@ -100,9 +120,14 @@ class SnakeGame {
   public static function theApple():Apple {return apple;};
 
   // the apple
-  private static var snakes:Array<Snake>;
+  private static var snakes:Array<Snake> = [];
   public static function theSnakes():Array<Snake> { return snakes; };
 
+  // game updates
+  private static function advance ( snake:Snake ) {
+    snake.advance();
+  }
+  
   // main entry point
   // ----------------
   public static function main() 
@@ -125,9 +150,9 @@ class SnakeGame {
     var PURPLE = 0xEE00EE;
 
     // snakes
-    var snakes = [new Snake(ORANGE),
-                  new Snake(GREEN),
-                  new Snake(BLUE)];    
+    snakes.push(new Snake(ORANGE, NORTH));
+    snakes.push(new Snake(GREEN, NORTH));
+    snakes.push(new Snake(BLUE, NORTH));
 
     var snakeCount = snakes.length; // can be any nonnegative integer, but smaller is better
     
@@ -148,6 +173,9 @@ class SnakeGame {
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP,
                                         function (event:KeyboardEvent) {
                                           switch( event.keyCode ) {
+                                            // advance snakes
+                                          case 32: // space
+                                            for (snake in snakes) { advance(snake); }
                                           default:
                                             trace(event.keyCode);
                                           }
