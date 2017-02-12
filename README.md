@@ -17,7 +17,9 @@ A simple Snake game in Haxe
 10:00PM - other business
 
 2017-02-10
-7:16PM - add tails to the snakes
+7:16PM - refactoring
 
+2017-02-11
+9:00PM - supporting adjustable numbers of snakes
 
 

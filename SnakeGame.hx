@@ -107,9 +107,23 @@ class SnakeGame {
   // ----------------
   public static function main() 
   {
-    var snakeCount = 4; // can be any nonnegative integer, but smaller is better
-    var startX = (Lib.current.stage.stageWidth - scale) / 2;
-    var startY = (Lib.current.stage.stageHeight - scale) / 2;
+    //snake colors
+    var ORANGE = 0xEEAA00;
+    var YELLOW = 0xEEEE00;
+    var GREEN  = 0x00EE00;
+    var CYAN   = 0x00EEEE;
+    var BLUE   = 0x0000EE;
+    var PURPLE = 0xEE00EE;
+
+    // snakes
+    var snakes = [new Snake(ORANGE),
+                  new Snake(YELLOW),
+                  new Snake(GREEN),
+                  new Snake(CYAN),
+                  new Snake(BLUE),
+                  new Snake(PURPLE)];
+
+    var snakeCount = snakes.length; // can be any nonnegative integer, but smaller is better
     
     apple = new Apple(RED);
 
@@ -118,7 +132,7 @@ class SnakeGame {
       var locX = xIncrement+(i*xIncrement);
       var locY = 3*scale+(Lib.current.stage.stageHeight - scale) / 2;
       var color:Int = rgb((128+Std.random(96)),(128+Std.random(96)),(128+Std.random(96)));
-      var snake = new Snake(color);
+      var snake = snakes[i];
       snake.addToStage(locX,locY);
     }
     
