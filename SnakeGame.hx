@@ -55,7 +55,7 @@ class Snake {
     Lib.current.addChild(head);    
   }
   
-  public function new(aColor:Int){
+  public function new(aColor:Int,controlSequence:Array<Int>){
     this.color = aColor;
     this.head = new Sprite();
     this.tail = [];
@@ -107,6 +107,15 @@ class SnakeGame {
   // ----------------
   public static function main() 
   {
+    // we can support any number of colors and snakes, but
+    // we must supply sets of control keys for each; picking
+    // convenient control keys limits the number of practical
+    // choices. I toyed with the idea of implementing a control
+    // scheme in which you press one or more number keys to
+    // indicate which snake to control, but that contradicted the
+    // stated requirements, so instead I supply one color and one
+    // set of control keys for each snake
+
     //snake colors
     var ORANGE = 0xEEAA00;
     var YELLOW = 0xEEEE00;
@@ -116,13 +125,11 @@ class SnakeGame {
     var PURPLE = 0xEE00EE;
 
     // snakes
-    var snakes = [new Snake(ORANGE),
-                  new Snake(YELLOW),
-                  new Snake(GREEN),
-                  new Snake(CYAN),
-                  new Snake(BLUE),
-                  new Snake(PURPLE)];
-
+    var snakes = [new Snake(ORANGE,[38,40,39,37]), // up, down, right, left
+                  new Snake(GREEN, [87,83,68,65]), // w,s,d,a
+                  new Snake(BLUE, [73,75,76,74])   // i,k,l,j
+                  ];
+    
     var snakeCount = snakes.length; // can be any nonnegative integer, but smaller is better
     
     apple = new Apple(RED);
