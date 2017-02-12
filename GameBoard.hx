@@ -3,6 +3,11 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 
+// ---------------------------------
+// GameBoard 
+// ---------------------------------
+// the playgin field for the game
+
 class GameBoard extends Sprite {
   private var isInitialized = false;
   private var scale:Int;
