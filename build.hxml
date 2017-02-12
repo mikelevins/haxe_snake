@@ -1,0 +1,4 @@
+-swf Snake.swf
+-main SnakeMain
+-swf-header 960:640:60
+-cmd open Snake.swf
