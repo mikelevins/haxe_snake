@@ -22,4 +22,9 @@ A simple Snake game in Haxe
 2017-02-11
 9:00PM - supporting adjustable numbers of snakes
 
+2017-02-12
+12:52PM - tucked away early experiments; started with fresh organization
+
+
+
 
