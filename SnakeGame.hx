@@ -55,7 +55,7 @@ class Snake {
     Lib.current.addChild(head);    
   }
   
-  public function new(aColor:Int,controlSequence:Array<Int>){
+  public function new(aColor:Int){
     this.color = aColor;
     this.head = new Sprite();
     this.tail = [];
@@ -125,11 +125,10 @@ class SnakeGame {
     var PURPLE = 0xEE00EE;
 
     // snakes
-    var snakes = [new Snake(ORANGE,[38,40,39,37]), // up, down, right, left
-                  new Snake(GREEN, [87,83,68,65]), // w,s,d,a
-                  new Snake(BLUE, [73,75,76,74])   // i,k,l,j
-                  ];
-    
+    var snakes = [new Snake(ORANGE),
+                  new Snake(GREEN),
+                  new Snake(BLUE)];    
+
     var snakeCount = snakes.length; // can be any nonnegative integer, but smaller is better
     
     apple = new Apple(RED);
@@ -146,6 +145,13 @@ class SnakeGame {
     Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
     Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
     Lib.current.addChild(apple);
+    Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP,
+                                        function (event:KeyboardEvent) {
+                                          switch( event.keyCode ) {
+                                          default:
+                                            trace(event.keyCode);
+                                          }
+                                        });
 
     
   };
