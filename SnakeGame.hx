@@ -74,11 +74,12 @@ class SnakeGame {
   // ----------------
   // colors
 
+  // apple color
   public static var RED = 0xCC0000;
-  public static var GREEN = 0x00CC00;
-  public static var CYAN = 0x00CCCC;
-  public static var BLUE = 0x0000CC;
 
+  // color constructor
+  public static function rgb(r:Int,g:Int,b:Int) { return (r*256*256)+(g*256)+b; };
+  
   // orientations
   public static var NORTH = [0,-1];
   public static var SOUTH = [0,1];
@@ -106,22 +107,19 @@ class SnakeGame {
   // ----------------
   public static function main() 
   {
+    var snakeCount = 4; // can be any nonnegative integer, but smaller is better
     var startX = (Lib.current.stage.stageWidth - scale) / 2;
     var startY = (Lib.current.stage.stageHeight - scale) / 2;
     
     apple = new Apple(RED);
-    snakes = [(new Snake(GREEN)),
-              (new Snake(CYAN)),
-              (new Snake(BLUE))];
 
-    var locations = [[startX-2*scale, startY+2*scale],
-                     [startX, startY+2*scale],
-                     [startX+2*scale, startY+2*scale]];
-
-    for (i in 0...3) {
-      var snake = snakes[i];
-      var loc = locations[i];
-      snake.addToStage(loc[0],loc[1]);
+    for (i in 0...snakeCount) {
+      var xIncrement = Lib.current.stage.stageWidth/(1+snakeCount);
+      var locX = xIncrement+(i*xIncrement);
+      var locY = 3*scale+(Lib.current.stage.stageHeight - scale) / 2;
+      var color:Int = rgb((128+Std.random(96)),(128+Std.random(96)),(128+Std.random(96)));
+      var snake = new Snake(color);
+      snake.addToStage(locX,locY);
     }
     
     Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
