@@ -6,7 +6,7 @@ import flash.events.KeyboardEvent;
 // ---------------------------------
 // GameBoard 
 // ---------------------------------
-// the playgin field for the game
+// the playing field for the game
 
 class GameBoard extends Sprite {
 
