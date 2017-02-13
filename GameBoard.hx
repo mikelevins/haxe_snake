@@ -33,8 +33,11 @@ class GameBoard extends Sprite {
   // managing the apple
   // --------------------------------------------
 
+  // TODO: find a place that doesn't have a snake in it
   private function placeForTheApple() {
-    return [Std.int(columnCount/2),Std.int(rowCount/2)];
+    var row = Std.random(rowCount);
+    var column = Std.random(columnCount);
+    return [column,row];
   }
   
   private function stageTheApple(){
