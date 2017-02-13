@@ -106,23 +106,20 @@ class GameBoard extends Sprite {
   
   // event handling
   // --------------------------------------------
-  
+
   private function keyUp (event:KeyboardEvent){
-    var snake = theSnakes[0];
-    switch (event.keyCode) {
-    case 38: // KEY_UP
-      snake.setOrientation(Orientation.UP);
-    case 40: // KEY_DOWN
-      snake.setOrientation(Orientation.DOWN);
-    case 39: // KEY_RIGHT
-      snake.setOrientation(Orientation.RIGHT);
-    case 37: // KEY_LEFT
-      snake.setOrientation(Orientation.LEFT);
-    case 32: // advance
+    var handled = false;
+
+    if ( event.keyCode == " ".code ) {
+      handled = true;
       advance();
-    default:
-      trace(event.keyCode);
+    } else {
+      for (snake in theSnakes) {
+        handled = snake.handleKey(event.keyCode);
+        if (handled) break;
+      }
     }
+    if (!handled) { trace(event.keyCode); };
   };
 
   // construction and initialization
@@ -155,7 +152,10 @@ class GameBoard extends Sprite {
     theApple = new Apple(scale);
     stageTheApple();
 
-    theSnakes = [new Snake(Colors.GREEN,Orientation.UP)];
+    theSnakes = [new Snake(Colors.GREEN,Orientation.UP,[Keys.UP,Keys.DOWN,Keys.RIGHT,Keys.LEFT]),
+                 new Snake(Colors.CYAN,Orientation.UP,["W".code, "S".code, "D".code, "A".code]),
+                 new Snake(Colors.BLUE,Orientation.UP,["I".code, "K".code, "L".code, "J".code])
+                 ];
     stageTheSnakes();
     
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
