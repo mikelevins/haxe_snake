@@ -17,6 +17,11 @@ class Snake {
   public function setOrientation(orientation:Orientation){ this.orientation=orientation; };
   public function getHead(){ return head; };
   public function getTail(){ return tail; };
+
+  public function advance () {
+    head.x += GameBoard.scale*orientation.x;
+    head.y += GameBoard.scale*orientation.y;
+  }
   
   public function new (color:Int, orientation:Orientation){
     this.color = color;

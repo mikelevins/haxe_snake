@@ -58,6 +58,13 @@ class GameBoard extends Sprite {
   // managing the snakes
   // --------------------------------------------
 
+  // TODO: find a place that doesn't have a snake in it
+  private function placeForASnake() {
+    var row = Std.random(rowCount);
+    var column = Std.random(columnCount);
+    return [column,row];
+  }
+
   // TODO: this version of stageASnake assumes
   //       that the tail is empty and will not
   //       work properly if it isn't. Either
@@ -66,10 +73,9 @@ class GameBoard extends Sprite {
   //       position a snake while preserving the
   //       shape of its tail
   private function stageASnake(snake:Snake){
-    var row = 38;
-    var column = 1;
-    var x = coordinateForColumn(column);
-    var y = coordinateForRow(row);
+    var place = placeForASnake();
+    var x = coordinateForColumn(place[0]);
+    var y = coordinateForRow(place[1]);
     var head = snake.getHead();
     head.x = x;
     head.y = y;
@@ -89,14 +95,37 @@ class GameBoard extends Sprite {
     }
   }
   
+  // game updates
+  // --------------------------------------------
+
+  private function advance() {
+    for (snake in theSnakes) {
+      snake.advance();
+    }
+  }
+  
   // event handling
   // --------------------------------------------
   
   private function keyUp (event:KeyboardEvent){
-    trace(event.keyCode);
+    var snake = theSnakes[0];
+    switch (event.keyCode) {
+    case 38: // KEY_UP
+      snake.setOrientation(Orientation.UP);
+    case 40: // KEY_DOWN
+      snake.setOrientation(Orientation.DOWN);
+    case 39: // KEY_RIGHT
+      snake.setOrientation(Orientation.RIGHT);
+    case 37: // KEY_LEFT
+      snake.setOrientation(Orientation.LEFT);
+    case 32: // advance
+      advance();
+    default:
+      trace(event.keyCode);
+    }
   };
 
-  // construction, initialization
+  // construction and initialization
   // --------------------------------------------
   
   function resize(e) 

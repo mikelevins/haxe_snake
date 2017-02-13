@@ -29,6 +29,7 @@ A simple Snake game in Haxe
 2:30PM  - stop
 5:35PM  - added support for the apple
 6:00PM  - stop
-7:00PM  - 
-
+7:00PM  - added code to stage a snake
+8:00PM  - stop
+10:40PM - 
 
