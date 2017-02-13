@@ -24,7 +24,11 @@ A simple Snake game in Haxe
 
 2017-02-12
 12:52PM - tucked away early experiments; started with fresh organization
-
-
+1:40PM  - stop
+2:00PM  - refactored code into classes with distinct roles
+2:30PM  - stop
+5:35PM  - added support for the apple
+6:00PM  - stop
+7:00PM  - 
 
 

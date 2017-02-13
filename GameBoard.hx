@@ -9,21 +9,56 @@ import flash.events.KeyboardEvent;
 // the playgin field for the game
 
 class GameBoard extends Sprite {
+
+  // private vars
+  // --------------------------------------------
+
   private var isInitialized = false;
   private var scale:Int;
   private var columnCount:Int;
   private var rowCount:Int;
+  private var theApple:Apple;
 
+  // gameboard dimensions
+  // --------------------------------------------
+
+  private function coordinateForColumn (column:Int) {
+    return ((2*column)+1)*scale/2;
+  };
+
+  private function coordinateForRow (row:Int) {
+    return ((2*row)+1)*scale/2;
+  };
+  
+  // managing the apple
+  // --------------------------------------------
+
+  private function placeForTheApple() {
+    return [Std.int(columnCount/2),Std.int(rowCount/2)];
+  }
+  
+  private function stageTheApple(){
+    var place = placeForTheApple();
+    var x = coordinateForColumn(place[0]);
+    var y = coordinateForRow(place[1]);
+    theApple.x = x;
+    theApple.y = y;
+    this.addChild(theApple);
+  }
+
+  private function removeTheApple(){
+    this.removeChild(theApple);
+  }
+  
+  // event handling
+  // --------------------------------------------
+  
   private function keyUp (event:KeyboardEvent){
     trace(event.keyCode);
   };
 
-  function init() {
-    if (isInitialized) return;
-    isInitialized = true;
-
-    Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
-  };
+  // construction, initialization
+  // --------------------------------------------
   
   function resize(e) 
   {
@@ -37,7 +72,24 @@ class GameBoard extends Sprite {
     stage.addEventListener(Event.RESIZE, resize);
     init();
   };
-  
+
+  function init() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    this.graphics.lineStyle(1, Colors.GOLD);
+    this.graphics.beginFill(Colors.IVORY, 1);
+    for ( i in 0...columnCount ) {
+      for (j in 0...rowCount)
+        this.graphics.drawRect(i*scale, j*scale, scale, scale);    
+    }
+    
+    theApple = new Apple(scale);
+    stageTheApple();
+
+    Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
+  };
+
   public function new ( scale:Int, columnCount:Int, rowCount:Int ){
     super();
     this.scale = scale;

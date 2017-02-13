@@ -18,7 +18,7 @@ class SnakeMain {
 
     // build-time game parameters
     var scale = 16;
-    var columnCount = 40;
+    var columnCount = 60;
     var rowCount = 40;
     
     theGameBoard = new GameBoard(scale,columnCount,rowCount);
