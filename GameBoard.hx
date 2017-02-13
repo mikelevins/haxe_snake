@@ -13,11 +13,13 @@ class GameBoard extends Sprite {
   // private vars
   // --------------------------------------------
 
+  public static var scale:Int;
+  public static var columnCount:Int;
+  public static var rowCount:Int;
+
   private var isInitialized = false;
-  private var scale:Int;
-  private var columnCount:Int;
-  private var rowCount:Int;
   private var theApple:Apple;
+  private var theSnakes:Array<Snake>;
 
   // gameboard dimensions
   // --------------------------------------------
@@ -51,6 +53,40 @@ class GameBoard extends Sprite {
 
   private function removeTheApple(){
     this.removeChild(theApple);
+  }
+
+  // managing the snakes
+  // --------------------------------------------
+
+  // TODO: this version of stageASnake assumes
+  //       that the tail is empty and will not
+  //       work properly if it isn't. Either
+  //       ensure that snakes can only be staged
+  //       with empty tails, or reimplement to
+  //       position a snake while preserving the
+  //       shape of its tail
+  private function stageASnake(snake:Snake){
+    var row = 38;
+    var column = 1;
+    var x = coordinateForColumn(column);
+    var y = coordinateForRow(row);
+    var head = snake.getHead();
+    head.x = x;
+    head.y = y;
+    this.addChild(head);
+  }
+  
+  private function stageTheSnakes(){
+    for (snake in theSnakes) {
+      stageASnake(snake);
+    }
+  }
+
+  private function removeASnake(snake:Snake){
+    this.removeChild(snake.getHead());
+    for (segment in snake.getTail()){
+      this.removeChild(segment);
+    }
   }
   
   // event handling
@@ -90,14 +126,17 @@ class GameBoard extends Sprite {
     theApple = new Apple(scale);
     stageTheApple();
 
+    theSnakes = [new Snake(Colors.GREEN,Orientation.UP)];
+    stageTheSnakes();
+    
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
   };
 
   public function new ( scale:Int, columnCount:Int, rowCount:Int ){
     super();
-    this.scale = scale;
-    this.columnCount = columnCount;
-    this.rowCount = rowCount;
+    GameBoard.scale = scale;
+    GameBoard.columnCount = columnCount;
+    GameBoard.rowCount = rowCount;
     addEventListener(Event.ADDED_TO_STAGE, added);
  }
 }
