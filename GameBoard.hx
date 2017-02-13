@@ -13,6 +13,7 @@ class GameBoard extends Sprite {
   // private vars
   // --------------------------------------------
 
+  public static var theGameBoard:GameBoard;
   public static var scale:Int;
   public static var columnCount:Int;
   public static var rowCount:Int;
@@ -24,12 +25,45 @@ class GameBoard extends Sprite {
   // gameboard dimensions
   // --------------------------------------------
 
-  private function coordinateForColumn (column:Int) {
-    return ((2*column)+1)*scale/2;
+  private static function coordinateForColumn(columnIndex:Int) { return ((2*columnIndex+1)*scale/2); }
+  private static function coordinateForRow(rowIndex:Int) { return ((2*rowIndex+1)*scale/2); }
+
+  private static function columnForCoordinate(coordinate:Int) { return Math.floor(coordinate/scale); }
+  private static function rowForCoordinate(coordinate:Int) { return Math.floor(coordinate/scale); }
+
+  public function isOnBoundary (x:Float, y: Float) {
+    if (x < 0) return true;
+    if (y < 0) return true;
+    if (x > scale*columnCount) return true;
+    if (y > scale*rowCount) return true;
+    return false;
+  };
+  
+  // gameboard children
+  // --------------------------------------------
+
+  public function isOnSnake (x:Float, y: Float, snake:Snake) {
+    var head = snake.getHead();
+    var tail = snake.getTail();
+
+    if ( (x == head.x) && (y == head.y)  ) { return true; }
+
+    for ( segment in tail ) {
+      if ( (x == segment.x) && (y == segment.y)  ) { return true; }
+    }
+
+    return false;
   };
 
-  private function coordinateForRow (row:Int) {
-    return ((2*row)+1)*scale/2;
+  public function isOnASnake (x:Float, y: Float) {
+    for (snake in theSnakes) {
+      if (isOnSnake(x,y,snake)) { return true; }
+    }
+    return false;
+  };
+
+  public function isOnTheApple (x:Float, y: Float) {
+    return (x == theApple.x) && (y == theApple.y);
   };
   
   // managing the apple
@@ -42,7 +76,7 @@ class GameBoard extends Sprite {
     return [column,row];
   }
   
-  private function stageTheApple(){
+  public function stageTheApple(){
     var place = placeForTheApple();
     var x = coordinateForColumn(place[0]);
     var y = coordinateForRow(place[1]);
@@ -51,7 +85,7 @@ class GameBoard extends Sprite {
     this.addChild(theApple);
   }
 
-  private function removeTheApple(){
+  public function removeTheApple(){
     this.removeChild(theApple);
   }
 
@@ -94,13 +128,18 @@ class GameBoard extends Sprite {
       this.removeChild(segment);
     }
   }
+
+  public function discardASnake(snake:Snake){
+    this.removeASnake(snake);
+    theSnakes.remove(snake);
+  }
   
   // game updates
   // --------------------------------------------
 
   private function advance() {
     for (snake in theSnakes) {
-      snake.advance();
+      snake.advance(this);
     }
   }
   
@@ -152,9 +191,9 @@ class GameBoard extends Sprite {
     theApple = new Apple(scale);
     stageTheApple();
 
-    theSnakes = [new Snake(Colors.GREEN,Orientation.UP,[Keys.UP,Keys.DOWN,Keys.RIGHT,Keys.LEFT]),
-                 new Snake(Colors.CYAN,Orientation.UP,["W".code, "S".code, "D".code, "A".code]),
-                 new Snake(Colors.BLUE,Orientation.UP,["I".code, "K".code, "L".code, "J".code])
+    theSnakes = [new Snake(Colors.GREEN,Orientation.UP,[Keys.UP,Keys.DOWN,Keys.RIGHT,Keys.LEFT])
+                 , new Snake(Colors.CYAN,Orientation.UP,["W".code, "S".code, "D".code, "A".code])
+                 //, new Snake(Colors.BLUE,Orientation.UP,["I".code, "K".code, "L".code, "J".code])
                  ];
     stageTheSnakes();
     
@@ -163,6 +202,7 @@ class GameBoard extends Sprite {
 
   public function new ( scale:Int, columnCount:Int, rowCount:Int ){
     super();
+    GameBoard.theGameBoard = this;
     GameBoard.scale = scale;
     GameBoard.columnCount = columnCount;
     GameBoard.rowCount = rowCount;

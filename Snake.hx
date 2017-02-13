@@ -34,9 +34,68 @@ class Snake {
     }
   }
   
-  public function advance () {
+  public function die() {
+    GameBoard.theGameBoard.discardASnake(this);
+  }
+  
+  public function advanceHeadAndTail() {
+    var i = tail.length;
+
+    if ( i > 0 ) {
+      while (--i > 0) {
+        var segment = tail[i];
+        var next_segment = tail[i-1];
+        segment.x = next_segment.x;
+        segment.y = next_segment.y;
+      }    
+
+      var segment = tail[0];
+      segment.x = head.x;
+      segment.y = head.y;
+    }
+
     head.x += GameBoard.scale*orientation.x;
     head.y += GameBoard.scale*orientation.y;
+  }
+  
+  public function advanceAndDie() {
+    advanceHeadAndTail();
+    die();
+  }
+  
+  public function eatApple() {
+    var newSegmentX = head.x;
+    var newSegmentY = head.y;
+    head.x += GameBoard.scale*orientation.x;
+    head.y += GameBoard.scale*orientation.y;
+    GameBoard.theGameBoard.removeTheApple();
+    addSegment(newSegmentX,newSegmentY);
+    GameBoard.theGameBoard.stageTheApple();
+  }
+
+  public function advance (board:GameBoard) {
+    var nextX = head.x+GameBoard.scale*orientation.x;
+    var nextY = head.y+GameBoard.scale*orientation.y;
+
+    if ( GameBoard.theGameBoard.isOnASnake(nextX,nextY) ) {
+      advanceAndDie();
+    } else if ( GameBoard.theGameBoard.isOnBoundary(nextX,nextY) ) {
+      advanceAndDie();
+    } else if ( GameBoard.theGameBoard.isOnTheApple(nextX,nextY) ) {
+      eatApple();
+    } else {
+      advanceHeadAndTail();
+    }
+  }
+
+  private function addSegment(x:Float,y:Float) {
+    var sprite = new Sprite();
+    sprite.graphics.beginFill(color);
+    sprite.graphics.drawCircle(0, 0, GameBoard.scale/2);
+    sprite.x = x;
+    sprite.y = y;
+    this.tail.insert(0,sprite);
+    GameBoard.theGameBoard.addChild(sprite);        
   }
   
   public function new (color:Int, orientation:Orientation, commandKeys:Array<Int>){

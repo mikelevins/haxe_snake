@@ -31,5 +31,8 @@ A simple Snake game in Haxe
 6:00PM  - stop
 7:00PM  - added code to stage a snake
 8:00PM  - stop
-10:40PM - 
+10:40PM - implemented snake movement and extensible command-handlers
+11:45PM - stop
 
+2017-02-13
+12:30AM - 
