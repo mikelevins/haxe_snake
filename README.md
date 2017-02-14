@@ -38,4 +38,7 @@ A simple Snake game in Haxe
 12:30AM - implemented growth, eating, and death
 2:00 AM - stop
 
+2017-02-14
+12:30AM - implemented death, game over, and the timer-driven main game loop
+
 
