@@ -2,6 +2,7 @@ import flash.Lib;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
+import haxe.Timer;
 
 // ---------------------------------
 // GameBoard 
@@ -21,6 +22,7 @@ class GameBoard extends Sprite {
   private var isInitialized = false;
   private var theApple:Apple;
   private var theSnakes:Array<Snake>;
+  private var runTimer:Timer=null;
 
   // gameboard dimensions
   // --------------------------------------------
@@ -187,12 +189,22 @@ class GameBoard extends Sprite {
   // event handling
   // --------------------------------------------
 
+  private function toggleStart() {
+    if (runTimer == null) {
+      runTimer = new haxe.Timer(500);
+      runTimer.run = advance;
+    } else {
+      runTimer.stop();
+      runTimer = null;
+    }
+  };
+  
   private function keyUp (event:KeyboardEvent){
     var handled = false;
 
     if ( event.keyCode == " ".code ) {
       handled = true;
-      advance();
+      toggleStart();
     } else {
       for (snake in theSnakes) {
         handled = snake.handleKey(event.keyCode);
