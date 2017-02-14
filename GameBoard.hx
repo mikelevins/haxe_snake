@@ -148,13 +148,39 @@ class GameBoard extends Sprite {
     this.removeASnake(snake);
     theSnakes.remove(snake);
   }
+
+  public function discardAllSnakes() {
+    for (snake in theSnakes) {
+      discardASnake(snake);
+    }
+    
+  }
   
   // game updates
   // --------------------------------------------
 
+  private function gameOver(){
+    removeTheApple();
+    discardAllSnakes();
+    trace("Game Over!");
+  }
+
   private function advance() {
-    for (snake in theSnakes) {
-      snake.advance(this);
+    // first see if all the snakes are gone; if so, the game is over
+    if (theSnakes.length < 1) {
+      gameOver();
+    } else {
+      // next check for empty squares;
+      var emptySquare = findAnEmptySquare();
+      // if there are none then the game is over
+      if (emptySquare == [-1,-1]) {
+        gameOver();
+      } else {
+        // if there were empty squares then the game continues
+        for (snake in theSnakes) {
+          snake.advance(this);
+        }
+      }
     }
   }
   
