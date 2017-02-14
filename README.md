@@ -35,4 +35,7 @@ A simple Snake game in Haxe
 11:45PM - stop
 
 2017-02-13
-12:30AM - 
+12:30AM - implemented growth, eating, and death
+2:00 AM - stop
+
+

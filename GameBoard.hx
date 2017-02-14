@@ -42,6 +42,33 @@ class GameBoard extends Sprite {
   // gameboard children
   // --------------------------------------------
 
+  public function findAnEmptySquare () {
+    // we'll start the search at a random square
+    // then search from the origin. This ensures
+    // that we find randomly-placed squares in order
+    // to randomize apple placement
+    
+    var startX = Std.random(columnCount);
+    var startY = Std.random(rowCount);
+
+    // first search from startX,startY to the end
+    for (j in startY...rowCount) {
+      for (i in startX...columnCount) {
+        if (!(isOnASnake(i,j)) && !(isOnTheApple(i,j))) return [i,j];
+      }
+    }
+
+    // next, search from 0,0 to startX,startY
+    for (j in startY...rowCount) {
+      for (i in startX...columnCount) {
+        if (!(isOnASnake(i,j)) && !(isOnTheApple(i,j))) return [i,j];
+      }
+    }
+
+    // if we get here then there are no empty squares
+    return [-1,-1];
+  }
+  
   public function isOnSnake (x:Float, y: Float, snake:Snake) {
     var head = snake.getHead();
     var tail = snake.getTail();
@@ -56,8 +83,10 @@ class GameBoard extends Sprite {
   };
 
   public function isOnASnake (x:Float, y: Float) {
-    for (snake in theSnakes) {
-      if (isOnSnake(x,y,snake)) { return true; }
+    if (theSnakes != null){
+      for (snake in theSnakes) {
+        if (isOnSnake(x,y,snake)) { return true; }
+      }
     }
     return false;
   };
@@ -68,16 +97,9 @@ class GameBoard extends Sprite {
   
   // managing the apple
   // --------------------------------------------
-
-  // TODO: find a place that doesn't have a snake in it
-  private function placeForTheApple() {
-    var row = Std.random(rowCount);
-    var column = Std.random(columnCount);
-    return [column,row];
-  }
   
   public function stageTheApple(){
-    var place = placeForTheApple();
+    var place = findAnEmptySquare();
     var x = coordinateForColumn(place[0]);
     var y = coordinateForRow(place[1]);
     theApple.x = x;
@@ -92,13 +114,6 @@ class GameBoard extends Sprite {
   // managing the snakes
   // --------------------------------------------
 
-  // TODO: find a place that doesn't have a snake in it
-  private function placeForASnake() {
-    var row = Std.random(rowCount);
-    var column = Std.random(columnCount);
-    return [column,row];
-  }
-
   // TODO: this version of stageASnake assumes
   //       that the tail is empty and will not
   //       work properly if it isn't. Either
@@ -107,7 +122,7 @@ class GameBoard extends Sprite {
   //       position a snake while preserving the
   //       shape of its tail
   private function stageASnake(snake:Snake){
-    var place = placeForASnake();
+    var place = findAnEmptySquare();
     var x = coordinateForColumn(place[0]);
     var y = coordinateForRow(place[1]);
     var head = snake.getHead();
