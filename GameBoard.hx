@@ -8,6 +8,8 @@ import haxe.Timer;
 // GameBoard 
 // ---------------------------------
 // the playing field for the game
+// the majority of game logic is defined
+// in this file
 
 class GameBoard extends Sprite {
 
@@ -71,6 +73,11 @@ class GameBoard extends Sprite {
     return [-1,-1];
   }
   
+
+  // collision tests
+  // --------------------------------------------
+
+  // test whether something is on a specific snake
   public function isOnSnake (x:Float, y: Float, snake:Snake) {
     var head = snake.getHead();
     var tail = snake.getTail();
@@ -84,6 +91,7 @@ class GameBoard extends Sprite {
     return false;
   };
 
+  // test whether something is on any of the snakes
   public function isOnASnake (x:Float, y: Float) {
     if (theSnakes != null){
       for (snake in theSnakes) {
@@ -99,6 +107,7 @@ class GameBoard extends Sprite {
   
   // managing the apple
   // --------------------------------------------
+  // staging and unstaging the apple
   
   public function stageTheApple(){
     var place = findAnEmptySquare();
@@ -133,12 +142,14 @@ class GameBoard extends Sprite {
     this.addChild(head);
   }
   
+  // stage all the snakes
   private function stageTheSnakes(){
     for (snake in theSnakes) {
       stageASnake(snake);
     }
   }
 
+  // remove a snake from the stage
   private function removeASnake(snake:Snake){
     this.removeChild(snake.getHead());
     for (segment in snake.getTail()){
@@ -146,11 +157,13 @@ class GameBoard extends Sprite {
     }
   }
 
+  // destroy a snake completely
   public function discardASnake(snake:Snake){
     this.removeASnake(snake);
     theSnakes.remove(snake);
   }
 
+  // destroy all the snakes; used in gameOver()
   public function discardAllSnakes() {
     for (snake in theSnakes) {
       discardASnake(snake);
@@ -161,12 +174,14 @@ class GameBoard extends Sprite {
   // game updates
   // --------------------------------------------
 
+  // permanently end the game
   private function gameOver(){
     removeTheApple();
     discardAllSnakes();
     trace("Game Over!");
   }
 
+  // the toplevel game-update function
   private function advance() {
     // first see if all the snakes are gone; if so, the game is over
     if (theSnakes.length < 1) {
@@ -189,6 +204,8 @@ class GameBoard extends Sprite {
   // event handling
   // --------------------------------------------
 
+  // if the game isn't running, start it
+  // if it's running, pause it
   private function toggleStart() {
     if (runTimer == null) {
       runTimer = new haxe.Timer(500);
@@ -199,6 +216,13 @@ class GameBoard extends Sprite {
     }
   };
   
+  // handle keypresses
+  // spacebar starts and pauses the game
+  // keys defined by Snake command maps
+  // control the orientations of snakes
+  // all other keys are traced in order to make it
+  // easy to check event-handling and find
+  // keys to use in command maps
   private function keyUp (event:KeyboardEvent){
     var handled = false;
 
@@ -216,13 +240,17 @@ class GameBoard extends Sprite {
 
   // construction and initialization
   // --------------------------------------------
-  
+
+  // this function is a stub for use
+  // if we decide to support resizing the gameboard
+  // while running
   function resize(e) 
   {
     if (!isInitialized) init();
     // else handle resizing the gameboard
   };
   
+  // initializes the gameboard when it's added to the stage
   function added(e) 
   {
     removeEventListener(Event.ADDED_TO_STAGE, added);
@@ -230,6 +258,8 @@ class GameBoard extends Sprite {
     init();
   };
 
+  // called to set up the gameboard for play
+  // draws the gameboard and sets up the apple and snakes
   function init() {
     if (isInitialized) return;
     isInitialized = true;
@@ -253,6 +283,7 @@ class GameBoard extends Sprite {
     Lib.current.stage.addEventListener( KeyboardEvent.KEY_UP, keyUp );
   };
 
+  // GameBoard constructor
   public function new ( scale:Int, columnCount:Int, rowCount:Int ){
     super();
     GameBoard.theGameBoard = this;

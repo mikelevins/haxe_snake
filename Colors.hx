@@ -1,11 +1,9 @@
-import flash.Lib;
-import flash.display.Sprite;
-
 
 // ---------------------------------
 // Colors 
 // ---------------------------------
-// handy predefined colors
+// handy predefined colors used by the
+// apple and snakes
 
 class Colors {
   public static var RED = 0xCC0000;

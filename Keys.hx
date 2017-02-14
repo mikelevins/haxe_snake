@@ -2,7 +2,8 @@
 // ---------------------------------
 // Keys 
 // ---------------------------------
-// utilities for working with key codes
+// convenient representation of the
+// arrow keys for use in commandMaps
 
 class Keys {
   public static var UP = 38;

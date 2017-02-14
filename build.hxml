@@ -1,4 +1,5 @@
 -swf Snake.swf
 -main SnakeMain
 -swf-header 960:640:60
+# uncomment to run the game when the build is done
 # -cmd open Snake.swf

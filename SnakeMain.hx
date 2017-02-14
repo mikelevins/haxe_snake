@@ -5,6 +5,9 @@ import flash.display.Sprite;
 // SnakeMain 
 // ---------------------------------
 // the main class and entry point
+// this code creates the GameBoard
+// and adds it to the stage, beginning
+// the game.
 
 class SnakeMain {
   private static var theGameBoard:GameBoard;

@@ -1,6 +1,4 @@
-import flash.Lib;
 import flash.display.Sprite;
-
 
 // ---------------------------------
 // Apple 
